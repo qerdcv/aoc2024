@@ -3,6 +3,7 @@ package day6
 import (
 	"bufio"
 	"io"
+	"math"
 	"regexp"
 	"strconv"
 	"unicode"
@@ -33,26 +34,38 @@ func ResolvePartTwo(r io.Reader) int {
 }
 
 func calculatePossibility(r race) int {
+	b := float64(r.time)
+	c := float64(r.distance)
 
-	minTime := 0
-	maxTime := 0
-	// find min time
-	for i := 1; i <= r.time; i++ {
-		if (r.time-i)*i > r.distance {
-			minTime = i
-			break
-		}
+	D := b*b - 4*c
+	maxTime := int((b + math.Sqrt(D)) / 2.0)
+	minTime := int((b - math.Sqrt(D)) / 2.0)
+
+	for (r.time-maxTime)*maxTime <= r.distance {
+		maxTime--
 	}
 
-	// find max time
-	for i := r.time; i > 0; i-- {
-		if (r.time-i)*i > r.distance {
-			maxTime = i
-			break
-		}
-	}
+	return maxTime - minTime
+	// old variant
+	// minTime := 0
+	// maxTime := 0
+	// // find min time
+	// for i := 1; i <= r.time; i++ {
+	// 	if (r.time-i)*i > r.distance {
+	// 		minTime = i
+	// 		break
+	// 	}
+	// }
 
-	return maxTime + 1 - minTime
+	// // find max time
+	// for i := r.time; i > 0; i-- {
+	// 	if (r.time-i)*i > r.distance {
+	// 		maxTime = i
+	// 		break
+	// 	}
+	// }
+
+	// return maxTime + 1 - minTime
 }
 
 func parseRaces(r io.Reader) []race {

@@ -16,6 +16,20 @@ var testRaces = []race{
 	{time: 72, distance: 1089},
 }
 
+func TestResolvePartOne(t *testing.T) {
+	expected := 861300
+	if got := calculatePossibilities(testRaces); got != expected {
+		t.Errorf("expected %d, got %d", expected, got)
+	}
+}
+
+func TestResolvePartTwo(t *testing.T) {
+	expected := 28101347
+	if got := calculatePossibility(testRace); got != expected {
+		t.Errorf("expected %d, got %d", expected, got)
+	}
+}
+
 func BenchmarkResolvePartOne(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		calculatePossibilities(testRaces)

@@ -14,8 +14,8 @@ func assertNoErr(err error) {
 }
 
 func main() {
-	f, err := os.Open("inputs/day_6.txt")
+	f, err := os.Open("inputs/day_6.test.txt")
 	assertNoErr(err)
 
-	fmt.Println(day6.ResolvePartTwo(f))
+	fmt.Println(day6.ResolvePartOne(f))
 }
