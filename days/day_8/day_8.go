@@ -37,32 +37,26 @@ func findMultiWay(
 	way string,
 	cond func(n string) bool,
 ) int {
-
-	totalSteps := make([]int, 0, len(startPositions))
+	stepsCh := make(chan int)
+	result := make(chan int)
 
 	for _, p := range startPositions {
-		steps := 0
-	wayLoop:
-		for {
-			for _, ch := range way {
-				steps += 1
-
-				switch ch {
-				case 'L':
-					p = nodes[p][0]
-				case 'R':
-					p = nodes[p][1]
-				}
-			}
-
-			if cond(p) {
-				totalSteps = append(totalSteps, steps)
-				break wayLoop
-			}
-		}
+		go func(p string) {
+			stepsCh <- findWay(nodes, p, way, cond)
+		}(p)
 	}
 
-	return LCM(totalSteps[0], totalSteps[1], totalSteps[2:]...)
+	go func() {
+		totalSteps := make([]int, len(startPositions))
+
+		for idx := range totalSteps {
+			totalSteps[idx] = <-stepsCh
+		}
+
+		result <- LCM(totalSteps[0], totalSteps[1], totalSteps[2:]...)
+	}()
+
+	return <-result
 }
 
 func findWay(nodes map[string][2]string, head, way string, cond func(n string) bool) int {
