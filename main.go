@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	day10 "github.com/qerdcv/aoc2023/days/day_10"
+	day11 "github.com/qerdcv/aoc2023/days/day_11"
 )
 
 func assertNoErr(err error) {
@@ -14,8 +14,8 @@ func assertNoErr(err error) {
 }
 
 func main() {
-	f, err := os.Open("inputs/day_10.txt")
+	f, err := os.Open("inputs/day_11.txt")
 	assertNoErr(err)
 
-	fmt.Println(day10.ResolvePartTwo(f))
+	fmt.Println(day11.ResolvePartOne(f))
 }
