@@ -4,18 +4,18 @@ import (
 	"fmt"
 	"os"
 
-	day14 "github.com/qerdcv/aoc2023/days/day_14"
+	day15 "github.com/qerdcv/aoc2023/days/day_15"
 )
 
 func run() error {
-	input, err := os.Open("inputs/day_14.txt")
+	input, err := os.Open("inputs/day_15.txt")
 	if err != nil {
 		return fmt.Errorf("os open: %w", err)
 	}
 
 	defer input.Close()
 
-	fmt.Println(day14.ResolvePartTwo(input))
+	fmt.Println(day15.ResolvePartTwo(input))
 
 	return nil
 }
