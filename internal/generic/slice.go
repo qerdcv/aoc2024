@@ -1,11 +1,11 @@
 package generic
 
-func PopStart[T any](ts []T) ([]T, T) {
-	if len(ts) == 0 {
-		return ts, *new(T)
+func Map[T, E any](s []T, f func(int, T) E) []E {
+	newS := make([]E, len(s))
+
+	for idx, sv := range s {
+		newS[idx] = f(idx, sv)
 	}
 
-	t := ts[0]
-	newTs := ts[1:]
-	return newTs, t
+	return newS
 }

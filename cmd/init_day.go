@@ -32,7 +32,7 @@ func initDay(args []string) error {
 		return ErrDayAlreadyExists
 	}
 
-	if err := os.Mkdir(path, os.ModeDir); err != nil {
+	if err := os.Mkdir(path, os.ModePerm); err != nil {
 		return fmt.Errorf("os mkdir: %w", err)
 	}
 
