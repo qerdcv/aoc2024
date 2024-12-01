@@ -6,7 +6,6 @@ import (
 	"io"
 	"slices"
 
-	"github.com/qerdcv/aoc/internal/generic"
 	"github.com/qerdcv/aoc/internal/xmath"
 )
 
@@ -44,14 +43,8 @@ func ResolvePartOne(r io.Reader) (int, error) {
 	slices.Sort(rightNums)
 
 	total := 0
-	var (
-		leftNum, rightNum int
-	)
-	for len(leftNums) != 0 && len(rightNums) != 0 {
-		leftNums, leftNum = generic.PopEnd[int](leftNums)
-		rightNums, rightNum = generic.PopEnd[int](rightNums)
-
-		total += xmath.Abs(leftNum - rightNum)
+	for i := range len(leftNums) {
+		total += xmath.Abs(leftNums[i] - rightNums[i])
 	}
 
 	return total, nil
