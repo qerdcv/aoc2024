@@ -1,3 +1,3 @@
-module github.com/qerdcv/aoc2023
+module github.com/qerdcv/aoc
 
 go 1.22

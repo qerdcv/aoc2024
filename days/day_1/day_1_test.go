@@ -4,7 +4,7 @@ import (
 	"strings"
 	"testing"
 
-	day "github.com/qerdcv/aoc2023/days/day_1"
+	day "github.com/qerdcv/aoc/days/day_1"
 )
 
 // BenchmarkResolvePartOne-12    	  374170	      3112 ns/op

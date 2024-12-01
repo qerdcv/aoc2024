@@ -3,7 +3,7 @@ package main
 import (
 	"os"
 
-	"github.com/qerdcv/aoc2023/internal/generic"
+	"github.com/qerdcv/aoc/internal/generic"
 )
 
 func main() {

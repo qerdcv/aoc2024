@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	day "github.com/qerdcv/aoc2023/days/day_1"
+	day "github.com/qerdcv/aoc/days/day_1"
 )
 
 func run() error {

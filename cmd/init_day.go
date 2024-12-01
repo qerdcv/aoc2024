@@ -6,7 +6,7 @@ import (
 	"os"
 	"path/filepath"
 
-	"github.com/qerdcv/aoc2023/internal/generic"
+	"github.com/qerdcv/aoc/internal/generic"
 )
 
 var ErrDayAlreadyExists = errors.New("day already exists")

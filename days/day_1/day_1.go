@@ -6,8 +6,8 @@ import (
 	"io"
 	"sort"
 
-	"github.com/qerdcv/aoc2023/internal/generic"
-	"github.com/qerdcv/aoc2023/internal/xmath"
+	"github.com/qerdcv/aoc/internal/generic"
+	"github.com/qerdcv/aoc/internal/xmath"
 )
 
 func ResolvePartOne(r io.Reader) (int, error) {
