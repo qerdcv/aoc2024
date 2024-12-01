@@ -15,7 +15,7 @@ func run() error {
 
 	defer input.Close()
 
-	fmt.Println(day.ResolvePartOne(input))
+	fmt.Println(day.ResolvePartTwo(input))
 
 	return nil
 }

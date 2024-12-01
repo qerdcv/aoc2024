@@ -27,16 +27,17 @@ func ResolvePartOne(r io.Reader) (int, error) {
 			&leftNum,
 			&rightNum,
 		)
-		if err != nil && !errors.Is(err, io.EOF) {
+		if err != nil {
+			if errors.Is(err, io.EOF) {
+				break
+			}
+
 			return 0, fmt.Errorf("scanf: %w", err)
 		}
 
 		leftNums = append(leftNums, leftNum)
 		rightNums = append(rightNums, rightNum)
 
-		if errors.Is(err, io.EOF) {
-			break
-		}
 	}
 
 	slices.Sort(leftNums)
@@ -71,16 +72,16 @@ func ResolvePartTwo(r io.Reader) (int, error) {
 			&leftNum,
 			&rightNum,
 		)
-		if err != nil && !errors.Is(err, io.EOF) {
+		if err != nil {
+			if errors.Is(err, io.EOF) {
+				break
+			}
+
 			return 0, fmt.Errorf("scanf: %w", err)
 		}
 
 		leftNums = append(leftNums, leftNum)
 		counter[rightNum] += 1
-
-		if errors.Is(err, io.EOF) {
-			break
-		}
 	}
 
 	total := 0
