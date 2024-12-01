@@ -4,7 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"io"
-	"sort"
+	"slices"
 
 	"github.com/qerdcv/aoc/internal/generic"
 	"github.com/qerdcv/aoc/internal/xmath"
@@ -39,8 +39,8 @@ func ResolvePartOne(r io.Reader) (int, error) {
 		}
 	}
 
-	sort.Sort(sort.Reverse(sort.IntSlice(leftNums)))
-	sort.Sort(sort.Reverse(sort.IntSlice(rightNums)))
+	slices.Sort(leftNums)
+	slices.Sort(rightNums)
 
 	total := 0
 	var (
