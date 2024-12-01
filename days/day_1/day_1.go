@@ -1,10 +1,10 @@
 package days
 
 import (
-	"container/heap"
 	"errors"
 	"fmt"
 	"io"
+	"sort"
 
 	"github.com/qerdcv/aoc2023/internal/generic"
 	"github.com/qerdcv/aoc2023/internal/xmath"
@@ -12,8 +12,8 @@ import (
 
 func ResolvePartOne(r io.Reader) (int, error) {
 	var (
-		leftPQ  generic.PriorityQueue
-		rightPQ generic.PriorityQueue
+		leftNums  []int
+		rightNums []int
 	)
 
 	for {
@@ -31,17 +31,26 @@ func ResolvePartOne(r io.Reader) (int, error) {
 			return 0, fmt.Errorf("scanf: %w", err)
 		}
 
-		heap.Push(&leftPQ, leftNum)
-		heap.Push(&rightPQ, rightNum)
+		leftNums = append(leftNums, leftNum)
+		rightNums = append(rightNums, rightNum)
 
 		if errors.Is(err, io.EOF) {
 			break
 		}
 	}
 
+	sort.Sort(sort.Reverse(sort.IntSlice(leftNums)))
+	sort.Sort(sort.Reverse(sort.IntSlice(rightNums)))
+
 	total := 0
-	for leftPQ.Len() != 0 && rightPQ.Len() != 0 {
-		total += xmath.Abs(heap.Pop(&leftPQ).(int) - heap.Pop(&rightPQ).(int))
+	var (
+		leftNum, rightNum int
+	)
+	for len(leftNums) != 0 && len(rightNums) != 0 {
+		leftNums, leftNum = generic.PopEnd[int](leftNums)
+		rightNums, rightNum = generic.PopEnd[int](rightNums)
+
+		total += xmath.Abs(leftNum - rightNum)
 	}
 
 	return total, nil
