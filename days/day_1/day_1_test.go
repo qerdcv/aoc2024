@@ -1,4 +1,4 @@
-package days_test
+package day_1_test
 
 import (
 	"strings"
