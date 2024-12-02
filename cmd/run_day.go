@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"io"
 	"os"
 
 	day "github.com/qerdcv/aoc/days/day_2"
@@ -14,6 +15,10 @@ func run() error {
 	}
 
 	defer input.Close()
+
+	fmt.Println(day.ResolvePartOne(input))
+
+	input.Seek(0, io.SeekStart)
 
 	fmt.Println(day.ResolvePartTwo(input))
 

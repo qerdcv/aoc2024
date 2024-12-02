@@ -37,17 +37,6 @@ func isSave(levels []int) bool {
 			}
 		}
 
-		if t == 1 {
-			if levels[i] < levels[i+1] {
-				return false
-			}
-
-		} else {
-			if levels[i] > levels[i+1] {
-				return false
-			}
-		}
-
 		diff := (levels[i] - levels[i+1]) * t
 		if diff < 1 || diff > 3 {
 			return false
@@ -76,8 +65,8 @@ func ResolvePartTwo(r io.Reader) int {
 }
 
 func isSaveV2(levels []int) bool {
+	tmp := make([]int, len(levels))
 	for i := 0; i < len(levels); i++ {
-		tmp := make([]int, len(levels))
 		copy(tmp, levels)
 
 		if isSave(append(tmp[:i], tmp[i+1:]...)) {
