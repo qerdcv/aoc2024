@@ -5,22 +5,27 @@ import (
 	"io"
 	"os"
 
-	day "github.com/qerdcv/aoc/days/day_2"
+	day "github.com/qerdcv/aoc/days/day_3"
 )
 
 func run() error {
-	input, err := os.Open("inputs/day_2.txt")
+	input, err := os.Open("inputs/day_3.txt")
 	if err != nil {
 		return fmt.Errorf("os open: %w", err)
 	}
 
 	defer input.Close()
 
-	fmt.Println(day.ResolvePartOne(input))
+	bytes, err := io.ReadAll(input)
+	if err != nil {
+		return fmt.Errorf("io read all: %w", err)
+	}
+
+	fmt.Println(day.ResolvePartOne(bytes))
 
 	input.Seek(0, io.SeekStart)
 
-	fmt.Println(day.ResolvePartTwo(input))
+	fmt.Println(day.ResolvePartTwo(bytes))
 
 	return nil
 }
