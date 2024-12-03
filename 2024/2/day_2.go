@@ -6,7 +6,7 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/qerdcv/aoc/internal/generic"
+	"github.com/qerdcv/aoc2024/internal/generic"
 )
 
 func ResolvePartOne(r io.Reader) int {

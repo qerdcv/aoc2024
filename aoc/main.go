@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/qerdcv/aoc/internal/generic"
+	"github.com/qerdcv/aoc2024/internal/generic"
 )
 
 func usage() {

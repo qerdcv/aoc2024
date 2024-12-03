@@ -6,7 +6,7 @@ import (
 	"io"
 	"slices"
 
-	"github.com/qerdcv/aoc/internal/xmath"
+	"github.com/qerdcv/aoc2024/internal/xmath"
 )
 
 func solvePartOne(r io.Reader) (int, error) {
