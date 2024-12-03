@@ -8,3 +8,9 @@ func Map[T, V any](ts []T, f func(t T) V) []V {
 
 	return vs
 }
+
+func ForEach[T any](ts []T, f func(t T)) {
+	for _, t := range ts {
+		f(t)
+	}
+}
