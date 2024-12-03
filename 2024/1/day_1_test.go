@@ -1,10 +1,8 @@
-package day_1_test
+package main
 
 import (
 	"strings"
 	"testing"
-
-	day "github.com/qerdcv/aoc/days/day_1"
 )
 
 // BenchmarkResolvePartOne-12    	  374170	      3112 ns/op
@@ -17,6 +15,6 @@ func BenchmarkResolvePartOne(b *testing.B) {
 3   3`
 
 	for range b.N {
-		day.ResolvePartOne(strings.NewReader(input))
+		solvePartOne(strings.NewReader(input))
 	}
 }
