@@ -7,7 +7,7 @@ import (
 
 func solvePartOne(lines [][]byte) (int, error) {
 	y, x, dir := getGuardPos(lines)
-	visited := map[string]struct{}{}
+	visited := map[string]struct{}{fmt.Sprintf("%dx%d", y, x): {}}
 
 	for {
 		dy, dx := deltaFromDir(dir)
