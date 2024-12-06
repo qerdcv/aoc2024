@@ -1,13 +1,20 @@
 package main
 
-import (
-	"fmt"
-	"io"
+type pos struct {
+	y, x int
+}
+
+const (
+	up = iota
+	right
+	down
+	left
 )
 
-func solvePartTwo(r io.Reader) (int, error) {
-	lines := readLines(r)
-	y, x, dy, dx := getGuardPos(lines)
+func solvePartTwo(lines [][]byte) (int, error) {
+	y, x, dir := getGuardPos(lines)
+	secPath := getSecPath(lines, y, x, dir)
+	visited := make(map[visitedKey]struct{}, len(secPath))
 
 	total := 0
 	for localY := range len(lines) {
@@ -16,10 +23,18 @@ func solvePartTwo(r io.Reader) (int, error) {
 				continue
 			}
 
+			spd, ok := secPath[pos{localY, localX}]
+			if !ok {
+				continue
+			}
+
 			tmp := lines[localY][localX]
 			lines[localY][localX] = '#'
 
-			if isLooped(lines, y, x, dy, dx) {
+			// optimization to reduce alloc calls
+			clear(visited)
+			dy, dx := deltaFromDir(spd)
+			if isLooped(lines, visited, localY-dy, localX-dx, spd) {
 				total += 1
 			}
 
@@ -27,55 +42,56 @@ func solvePartTwo(r io.Reader) (int, error) {
 		}
 	}
 
-	for _, row := range lines {
-		fmt.Println(string(row))
-	}
-
 	return total, nil
 }
 
-func isLooped(lines [][]byte, y, x, dy, dx int) bool {
-	visited := map[string]struct{}{}
+func getSecPath(lines [][]byte, y, x, dir int) map[pos]int {
+	res := map[pos]int{}
+	for {
+		dy, dx := deltaFromDir(dir)
+		y += dy
+		x += dx
+		if y < 0 || y >= len(lines) || x < 0 || x >= len(lines[0]) {
+			break
+		}
 
+		if lines[y][x] == '#' {
+			y, x = y-dy, x-dx
+			dir = (dir + 1) % 4
+			continue
+		}
+
+		if _, ok := res[pos{y, x}]; !ok {
+			res[pos{y, x}] = dir
+		}
+	}
+
+	return res
+}
+
+type visitedKey struct {
+	y, x, dir int
+}
+
+func isLooped(lines [][]byte, visited map[visitedKey]struct{}, y, x, dir int) bool {
+	dy, dx := deltaFromDir(dir)
 	for {
 		y, x = y+dy, x+dx
 		if y < 0 || y >= len(lines) || x < 0 || x >= len(lines[0]) {
 			return false
 		}
 
-		if _, ok := visited[getVisitedKey(y, x, dy, dx)]; ok {
+		if _, ok := visited[visitedKey{y, x, dir}]; ok {
 			return true
-		}
-
-		if lines[y][x] != '#' && lines[y][x] != '^' {
-			if dx != 0 {
-				lines[y][x] = '-'
-			}
-
-			if dy != 0 {
-				lines[y][x] = '|'
-			}
 		}
 
 		if lines[y][x] == '#' {
 			y, x = y-dy, x-dx
-			lines[y][x] = '+'
-			if dx == 1 {
-				dy, dx = 1, 0
-			} else if dx == -1 {
-				dy, dx = -1, 0
-			} else if dy == -1 {
-				dy, dx = 0, 1
-			} else if dy == 1 {
-				dy, dx = 0, -1
-			}
+			dir = (dir + 1) % 4
+			dy, dx = deltaFromDir(dir)
 			continue
 		}
 
-		visited[getVisitedKey(y, x, dy, dx)] = struct{}{}
+		visited[visitedKey{y, x, dir}] = struct{}{}
 	}
-}
-
-func getVisitedKey(y, x, dy, dx int) string {
-	return fmt.Sprintf("%dx%dx%dx%d", y, x, dy, dx)
 }

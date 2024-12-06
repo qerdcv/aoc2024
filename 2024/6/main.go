@@ -1,9 +1,9 @@
 package main
 
 import (
+	"bufio"
 	"embed"
 	"fmt"
-	"io"
 	"os"
 )
 
@@ -23,16 +23,20 @@ func main() {
 		return
 	}
 
-	partOne, err := solvePartOne(f)
+	s := bufio.NewScanner(f)
+	var lines [][]byte
+	for s.Scan() {
+		lines = append(lines, []byte(s.Text()))
+	}
+
+	partOne, err := solvePartOne(lines)
 	if err != nil {
 		fmt.Printf("error part one: %s\n\n", err.Error())
 		os.Exit(1)
 		return
 	}
 
-	f.(io.Seeker).Seek(0, io.SeekStart)
-
-	partTwo, err := solvePartTwo(f)
+	partTwo, err := solvePartTwo(lines)
 	if err != nil {
 		fmt.Printf("error part one: %s\n\n", err.Error())
 		os.Exit(1)
@@ -41,4 +45,3 @@ func main() {
 
 	fmt.Printf("Results:\n\tPart one: %3d\n\tPart two: %3d\n\n", partOne, partTwo)
 }
-
