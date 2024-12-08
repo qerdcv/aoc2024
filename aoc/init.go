@@ -51,7 +51,6 @@ func main() {
 
 	fmt.Printf("Results:\n\tPart one: %3d\n\tPart two: %3d\n\n", partOne, partTwo)
 }
-
 `
 
 const partFileTemplate = `package main
@@ -61,7 +60,6 @@ import "io"
 func solvePart%s(r io.Reader) (int, error) {
 	return 0, nil
 }
-
 `
 
 func initDay(args []string) error {
