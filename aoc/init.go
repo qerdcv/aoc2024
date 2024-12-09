@@ -33,7 +33,17 @@ func main() {
 		return
 	}
 
-	partOne, err := solvePartOne(f)
+	defer f.Close()
+
+	b, err := io.ReadAll(f)
+	if err != nil {
+		fmt.Printf("error: %s\n\n", err.Error())
+		os.Exit(1)
+		return
+	}
+
+	input := string(b)
+	partOne, err := solvePartOne(input)
 	if err != nil {
 		fmt.Printf("error part one: %s\n\n", err.Error())
 		os.Exit(1)
@@ -42,7 +52,7 @@ func main() {
 
 	f.(io.Seeker).Seek(0, io.SeekStart)
 
-	partTwo, err := solvePartTwo(f)
+	partTwo, err := solvePartTwo(input)
 	if err != nil {
 		fmt.Printf("error part one: %s\n\n", err.Error())
 		os.Exit(1)
@@ -57,7 +67,7 @@ const partFileTemplate = `package main
 
 import "io"
 
-func solvePart%s(r io.Reader) (int, error) {
+func solvePart%s(input string) (int, error) {
 	return 0, nil
 }
 `
