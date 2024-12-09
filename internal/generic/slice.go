@@ -32,3 +32,13 @@ func Pop[T any](ts []T, idx int) ([]T, T) {
 	ts = append(ts[:idx], ts[idx+1:]...)
 	return ts, v
 }
+
+func All[T any](ts []T, f func(t T) bool) bool {
+	for _, t := range ts {
+		if !f(t) {
+			return false
+		}
+	}
+
+	return true
+}
