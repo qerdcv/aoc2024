@@ -65,8 +65,6 @@ func main() {
 
 const partFileTemplate = `package main
 
-import "io"
-
 func solvePart%s(input string) (int, error) {
 	return 0, nil
 }
