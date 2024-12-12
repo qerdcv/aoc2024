@@ -21,31 +21,6 @@ func solvePartOne(input string) (int, error) {
 		visited[i] = make([]bool, gL)
 	}
 
-	bound := func(p pos) bool {
-		return p.y < gL && p.y >= 0 && p.x < gL && p.x >= 0
-	}
-
-	neighborCount := func(p pos, ch string) int {
-		n := 0
-		for _, dp := range []pos{
-			{-1, 0},
-			{1, 0},
-			{0, 1},
-			{0, -1},
-		} {
-			newP := pos{y: p.y + dp.y, x: p.x + dp.x}
-			if !bound(newP) {
-				continue
-			}
-
-			if ch == grid[newP.y][newP.x] {
-				n++
-			}
-		}
-
-		return n
-	}
-
 	var scanRegion func(p pos, ch string) (int, int)
 
 	scanRegion = func(p pos, ch string) (int, int) {
@@ -54,7 +29,7 @@ func solvePartOne(input string) (int, error) {
 		}
 
 		visited[p.y][p.x] = true
-		res := 4 - neighborCount(p, ch)
+		res := 4
 		area := 1
 		for _, dp := range []pos{
 			{-1, 0},
@@ -63,11 +38,12 @@ func solvePartOne(input string) (int, error) {
 			{0, -1},
 		} {
 			newP := pos{y: p.y + dp.y, x: p.x + dp.x}
-			if !bound(newP) || grid[newP.y][newP.x] != ch {
+			if !bounds(newP, gL) || grid[newP.y][newP.x] != ch {
 				continue
 			}
+
 			r2, a2 := scanRegion(newP, ch)
-			res += r2
+			res += r2 - 1
 			area += a2
 		}
 

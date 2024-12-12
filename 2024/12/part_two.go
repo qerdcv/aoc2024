@@ -30,15 +30,14 @@ func scanRegion(p pos, ch string, grid [][]string, visited [][]bool, edges map[e
 	visited[p.y][p.x] = true
 	area := 1
 
-	// Explore neighboring cells
 	for _, dp := range dps {
 		newP := pos{y: p.y + dp.y, x: p.x + dp.x}
 
 		if !bounds(newP, gridSize) || grid[newP.y][newP.x] != ch {
 			edges[edge{p: p, dp: dp}] = struct{}{}
-		} else {
-			area += scanRegion(newP, ch, grid, visited, edges, gridSize)
+			continue
 		}
+		area += scanRegion(newP, ch, grid, visited, edges, gridSize)
 	}
 
 	return area
@@ -50,7 +49,6 @@ func solvePartTwo(input string) (int, error) {
 	})
 	gridSize := len(grid)
 
-	// Initialize visited array
 	visited := make([][]bool, gridSize)
 	for i := range visited {
 		visited[i] = make([]bool, gridSize)
