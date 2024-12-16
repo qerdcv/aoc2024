@@ -1,30 +1,32 @@
 package generic
 
-import "container/heap"
-
-type PriorityQueue []int
-
-func (p PriorityQueue) Len() int {
-	return len(p)
+type comparable[T any] interface {
+	Less(T) bool
 }
 
-func (p PriorityQueue) Less(i, j int) bool {
-	return p[i] < p[j]
+type PriorityQueue[T comparable[T]] struct {
+	items []T
 }
 
-func (p PriorityQueue) Swap(i, j int) {
-	p[i], p[j] = p[j], p[i]
+func (p *PriorityQueue[T]) Len() int {
+	return len(p.items)
 }
 
-func (p *PriorityQueue) Push(x any) {
-	*p = append(*p, x.(int))
+func (p *PriorityQueue[T]) Less(i, j int) bool {
+	return p.items[i].Less(p.items[j])
 }
 
-func (p *PriorityQueue) Pop() any {
+func (p *PriorityQueue[T]) Swap(i, j int) {
+	p.items[i], p.items[j] = p.items[j], p.items[i]
+}
+
+func (p *PriorityQueue[T]) Push(x any) {
+	p.items = append(p.items, x.(T))
+}
+
+func (p *PriorityQueue[T]) Pop() any {
 	pLen := p.Len() - 1
-	val := (*p)[pLen]
-	*p = (*p)[:pLen]
+	val := p.items[pLen]
+	p.items = p.items[:pLen]
 	return val
 }
-
-var _ heap.Interface = (*PriorityQueue)(nil)

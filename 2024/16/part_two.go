@@ -2,48 +2,69 @@ package main
 
 import (
 	"container/heap"
+	"fmt"
 	"strings"
 
 	"github.com/qerdcv/aoc2024/internal/generic"
 )
 
-type cackeVal struct {
-	score   int
-	prevPos pos
-	prevDir dir
+type qItem2 struct {
+	p     pos
+	score int
+	steps int
+	d     dir
+	prev  *qItem2
 }
 
-// 10039 - too high
+func (i qItem2) Less(a qItem2) bool {
+	return i.score < a.score
+}
+
 func solvePartTwo(input string) (int, error) {
 	grid := generic.Map(strings.Split(input, "\n"), func(t string) []string {
 		return strings.Split(t, "")
 	})
 
-	start := findStart(grid, "S")
-	q := &pq{}
+	start := findEl(grid, "S")
+	end := findEl(grid, "E")
+	q := &generic.PriorityQueue[qItem2]{}
 	heap.Init(q)
 
-	heap.Push(q, qItem{
+	heap.Push(q, qItem2{
 		p:     start,
 		score: 1000,
+		steps: 0,
 		d:     up,
+		prev:  nil,
 	})
 
-	cache := map[cacheKey]cackeVal{}
-
+	cache := map[cacheKey]int{}
+	best := -1
+	var items []qItem2
 	for q.Len() != 0 {
-		el := heap.Pop(q).(qItem)
+		el := heap.Pop(q).(qItem2)
 		currentP := el.p
 		currentD := el.d
 		currentS := el.score
+		currentSteps := el.steps
 
-		if grid[currentP.y][currentP.x] == "E" {
-			return currentS, nil
+		if currentP == end {
+			if best == -1 {
+				best = currentS
+			}
+
+			if currentS == best {
+				items = append(items, el)
+			}
 		}
 
 		ck := cacheKey{
 			p: currentP,
 			d: currentD,
+		}
+
+		if v, ok := cache[ck]; ok && v < currentS {
+			continue
 		}
 
 		cache[ck] = currentS
@@ -64,15 +85,35 @@ func solvePartTwo(input string) (int, error) {
 				nextS += 1000
 			}
 
-			if cachedS, found := cache[cacheKey{p: nextP, d: nextD}]; !found || cachedS > nextS {
-				heap.Push(q, qItem{
-					nextP,
-					nextS,
-					nextD,
-				})
-			}
+			heap.Push(q, qItem2{
+				nextP,
+				nextS,
+				currentSteps + 1,
+				nextD,
+				&el,
+			})
 		}
 	}
 
-	return 0, nil
+	coords := map[pos]struct{}{}
+	for _, el := range items {
+		coords[el.p] = struct{}{}
+		current := el.prev
+		for current != nil {
+			coords[current.p] = struct{}{}
+			current = current.prev
+		}
+	}
+
+	return len(coords), nil
+}
+
+func printGrid(grid [][]string) {
+	for _, row := range grid {
+		for _, col := range row {
+			fmt.Print(col)
+		}
+		fmt.Println()
+	}
+	fmt.Println()
 }

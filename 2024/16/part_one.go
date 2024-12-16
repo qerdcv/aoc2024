@@ -40,45 +40,19 @@ func (p pos) move(d dir) pos {
 	return pos{x: p.x + dp.x, y: p.y + dp.y}
 }
 
+type cacheKey struct {
+	p pos
+	d dir
+}
+
 type qItem struct {
 	p     pos
 	score int
 	d     dir
 }
 
-type pq []qItem
-
-// Len implements heap.Interface.
-func (p pq) Len() int {
-	return len(p)
-}
-
-// Less implements heap.Interface.
-func (p pq) Less(i int, j int) bool {
-	return p[i].score < p[j].score
-}
-
-// Swap implements heap.Interface.
-func (p pq) Swap(i int, j int) {
-	p[i], p[j] = p[j], p[i]
-}
-
-// Pop implements heap.Interface.
-func (p *pq) Pop() any {
-	pLen := p.Len() - 1
-	val := (*p)[pLen]
-	*p = (*p)[:pLen]
-	return val
-}
-
-// Push implements heap.Interface.
-func (p *pq) Push(x any) {
-	(*p) = append((*p), x.(qItem))
-}
-
-type cacheKey struct {
-	p pos
-	d dir
+func (i qItem) Less(a qItem) bool {
+	return i.score < a.score
 }
 
 func solvePartOne(input string) (int, error) {
@@ -86,8 +60,9 @@ func solvePartOne(input string) (int, error) {
 		return strings.Split(t, "")
 	})
 
-	start := findStart(grid, "S")
-	q := &pq{}
+	start := findEl(grid, "S")
+	end := findEl(grid, "E")
+	q := &generic.PriorityQueue[qItem]{}
 	heap.Init(q)
 
 	heap.Push(q, qItem{
@@ -96,7 +71,7 @@ func solvePartOne(input string) (int, error) {
 		d:     up,
 	})
 
-	cache := map[cacheKey]int{}
+	cache := map[cacheKey]bool{}
 
 	for q.Len() != 0 {
 		el := heap.Pop(q).(qItem)
@@ -104,7 +79,7 @@ func solvePartOne(input string) (int, error) {
 		currentD := el.d
 		currentS := el.score
 
-		if grid[currentP.y][currentP.x] == "E" {
+		if currentP == end {
 			return currentS, nil
 		}
 
@@ -113,11 +88,11 @@ func solvePartOne(input string) (int, error) {
 			d: currentD,
 		}
 
-		if existingScore, exists := cache[ck]; exists && existingScore <= currentS {
+		if exists := cache[ck]; exists {
 			continue
 		}
 
-		cache[ck] = currentS
+		cache[ck] = true
 
 		for _, nextD := range []dir{
 			currentD,
@@ -135,7 +110,7 @@ func solvePartOne(input string) (int, error) {
 				nextS += 1000
 			}
 
-			if cachedS, found := cache[cacheKey{p: nextP, d: nextD}]; !found || cachedS > nextS {
+			if found := cache[cacheKey{p: nextP, d: nextD}]; !found {
 				heap.Push(q, qItem{
 					nextP,
 					nextS,
@@ -148,7 +123,7 @@ func solvePartOne(input string) (int, error) {
 	return 0, nil
 }
 
-func findStart(grid [][]string, el string) pos {
+func findEl(grid [][]string, el string) pos {
 	for y, row := range grid {
 		for x, col := range row {
 			if col == el {
