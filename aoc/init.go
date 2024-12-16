@@ -50,8 +50,6 @@ func main() {
 		return
 	}
 
-	f.(io.Seeker).Seek(0, io.SeekStart)
-
 	partTwo, err := solvePartTwo(input)
 	if err != nil {
 		fmt.Printf("error part one: %s\n\n", err.Error())
